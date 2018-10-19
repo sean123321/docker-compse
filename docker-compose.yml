@@ -1,0 +1,43 @@
+ version: "3"
+ services: 
+   web:
+     # 依赖php服务，意味着在启动nginx之前先启动php
+#     depends_on:
+#       - "php"	 
+     image: nginx 
+     ports: 
+       - "80:80" 
+     volumes: 
+       - "$PWD/www:/usr/share/nginx/html" 
+       - "$PWD/nginx/conf.d:/etc/nginx/conf.d"
+#       - "$PWD/nginx/nginx.conf:/etc/nginx/nginx.conf"		 
+#       - "$PWD/log/nginx:/var/log/nginx" 
+     # nginx意外退出时自动重启
+#      restart: always
+      # 容器名称
+#      container_name: nginx    
+   php:
+#     depends_on:
+#       - mysql
+     ports:
+       - "9000:9000"
+     image: phppdo:7.2-fpm
+#     restart: always
+     volumes:
+       - "$PWD/www:/var/www/html"
+       - "$PWD/php/phpconf:/usr/local/etc/php"
+#     container_name: php
+   mysql:
+     image: mysql:5.7
+     ports:
+       - "3306:3306"
+     volumes:
+       - "$PWD/mysql/conf:/etc/mysql/mysql.conf.d"
+       - "$PWD/mysql/data:/var/lib/mysql"
+#    restart: always
+     # 设置MYSQL_ROOT_PASSWORD环境变量，这里是设置mysql的root密码。这里为root。
+     environment:
+       - TZ=Asia/Shanghai
+       - MYSQL_ROOT_PASSWORD=root
+     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
+#     container_name: mysql		  	
