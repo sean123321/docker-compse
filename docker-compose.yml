@@ -40,4 +40,12 @@
        - TZ=Asia/Shanghai
        - MYSQL_ROOT_PASSWORD=root
      command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
-#     container_name: mysql		  	
+#     container_name: mysql
+   redis:
+     image: redis
+     ports:
+       - "6379:6379"
+     volumes:
+       - "$PWD/redis/conf/redis.conf:/usr/local/bin/redis.conf"
+       - "$PWD/redis/data:/data"
+     command: /bin/bash -c "redis-server /usr/local/bin/redis.conf"
